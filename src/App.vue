@@ -2,8 +2,13 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
     <Title message="I pokemon di Classe 22"/>
+     <FormCustom title="Cerca un pokemon"
+     @sendForm="searchPokemon"/>
+     <FormCustom title="Cerca per tipologia"
+     @sendForm="searchType"/>
     <Cards :cards="pokemons" />
-    <Cards :cards="players" />
+   
+    <!-- <Cards :cards="players" className="cards"/> -->
     <!-- <ul>
       <li v-for="(pokemon,index) in pokemons" :key="index">
         <a :href="pokemon.url" target="_blank">{{ pokemon.name }}</a>
@@ -17,12 +22,15 @@
 // import HelloWorld from "./components/HelloWorld.vue";
 import Title from "./components/Title.vue";
 import Cards from "./views/Cards.vue";
+import FormCustom from "./components/FormCustom.vue";
+
 export default {
   name: "App",
   components: {
     // HelloWorld
     Title,
-    Cards
+    Cards,
+    FormCustom
   },
   data(){
     return{
@@ -41,13 +49,45 @@ export default {
   },
   mounted(){
     this.axios
-    .get(this.base_url + "/pokemon")
+    .get(`${this.base_url}/pokemon`)
     .then((response)=>{
       console.log(response.data);
 
       this.pokemons=response.data.results;
     });
+  },
+    methods: {
+    searchPokemon:function(text){
+      console.log(text);
+
+      this.axios
+    .get(`${this.base_url}/pokemon/${text}`)
+    .then((response)=>{
+      console.log(response.data);
+
+      this.pokemons= [
+        {
+        name: response.data.name
+        }
+      ];
+    });
+    },
+    searchType:function(text){
+      this.axios
+      .get(`${this.base_url}/type/${text}`)
+      .then((response)=>{
+        console.log("type Search");
+        console.log(response.data.pokemon);
+
+      // this.pokemons= [
+      //   {
+      //   name: response.data.name
+      //   }
+      // ];
+    });
+    }
   }
+
 };
 </script>
 
