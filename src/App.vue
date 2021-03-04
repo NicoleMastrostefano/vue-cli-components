@@ -79,6 +79,17 @@ export default {
         console.log("type Search");
         console.log(response.data.pokemon);
 
+        this.pokemons =response.data.pokemon.map(
+          (element)=>{
+            // console.log(element);
+
+            return {
+              "name":element.pokemon.name,
+              "url":element.pokemon.url
+            }
+          }
+        );
+
       // this.pokemons= [
       //   {
       //   name: response.data.name
